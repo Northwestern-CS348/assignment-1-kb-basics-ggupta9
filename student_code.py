@@ -18,20 +18,18 @@ class KnowledgeBase(object):
         return string
 
     def kb_assert(self, fact):
-        """Assert a fact or rule into the KB
+        isFact = isinstance(fact, Fact)
+        if isFact == True and fact not in self.facts:
+            self.facts.append(fact)
+            print("Asserting {!r}".format(fact))
+        else:
+            print("Could not assert")
 
-        Args:
-            fact (Fact or Rule): Fact or Rule we're asserting in the format produced by read.py
-        """
-        print("Asserting {!r}".format(fact))
-        
     def kb_ask(self, fact):
-        """Ask if a fact is in the KB
-
-        Args:
-            fact (Fact) - Fact to be asked
-
-        Returns:
-            ListOfBindings|False - ListOfBindings if result found, False otherwise
-        """
         print("Asking {!r}".format(fact))
+        bindings_list = ListOfBindings()
+        for i in self.facts:
+            j = match(fact.statement, i.statement)
+            if isinstance(j, Bindings):
+                bindings_list.add_bindings(j)
+        return bindings_list
